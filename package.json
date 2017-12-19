@@ -1,0 +1,21 @@
+{
+  "name": "generator-mpa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "files": [
+    "controller",
+    "middleware",
+    "component",
+    "page",
+    "page-component"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "yeoman-generator": "^2.0.1",
+    "yosay": "^2.0.1"
+  }
+}
