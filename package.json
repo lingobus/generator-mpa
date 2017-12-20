@@ -1,18 +1,23 @@
 {
   "name": "generator-mpa",
   "version": "1.0.0",
-  "description": "",
+  "description": "Yeoman Generators for vue-mpa-template generated projects",
   "main": "index.js",
   "scripts": {},
   "files": [
-    "controller",
-    "middleware",
+    "api",
     "component",
+    "controller",
+    "download",
+    "middleware",
+    "mock",
     "page",
-    "page-component"
+    "prototype-login",
+    "spa",
+    "store"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "aztack@163.com",
+  "license": "MIT",
   "dependencies": {
     "colors": "^1.1.2",
     "download-git-repo": "^1.0.1",
