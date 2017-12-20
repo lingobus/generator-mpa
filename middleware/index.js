@@ -13,17 +13,17 @@ module.exports = class extends Generator {
 
     const prompts = [{
       type: 'input',
-      name: 'controllerName',
+      name: 'name',
       message: 'Please input middelware name:',
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.controllerName = answers.controllerName;
+      this.name = answers.name;
     });
   }
 
   writing() {
-    var name = this.controllerName + '.js'
+    var name = this.name + '.js'
     this.fs.copyTpl(
       this.templatePath('index.js'),
       this.destinationPath('middlewares/' + name), {
