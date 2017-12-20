@@ -6,6 +6,7 @@ module.exports = class extends Generator {
   }
 
   initializing() {
-    // this.pkg = require('../package.json');
+    this.pkg = require('../package.json')
+    this.log('mpa')
   }
 };
