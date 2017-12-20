@@ -16,7 +16,19 @@
     "spa",
     "store"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lingobus/generator-mpa.git"
+  },
+  "keywords": [
+    "vue.js",
+    "vue-mpa-template"
+  ],
   "author": "aztack@163.com",
+  "bugs": {
+    "url": "https://github.com/lingobus/generator-mpa/issues"
+  },
+  "homepage": "https://github.com/lingobus/generator-mpa#readme",
   "license": "MIT",
   "dependencies": {
     "colors": "^1.1.2",
