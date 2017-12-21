@@ -8,7 +8,7 @@ import routes from './_routes.js'
 import modules from './store'
 import 'utils/_interceptors.js'
 import { Notification } from 'element-ui'
-
+require('promise.prototype.finally').shim()
 window.$LB = window.$LB || {}
 
 import Icon from 'vue-awesome'

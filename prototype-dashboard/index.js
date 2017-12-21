@@ -49,7 +49,16 @@ module.exports = class extends Generator {
     `)
 
     // install dependencies
-    this.yarnInstall(['vue-awesome'])
+    this.yarnInstall([
+      "vue-awesome",
+      "babel-plugin-syntax-jsx",
+      "babel-plugin-transform-vue-jsx"
+    ])
+
+    this.log(`add following plugins into .bablerc and restart dev server:`.red.bold)
+    this.log(`
+    "plugins": [transform-vue-jsx"]
+    `)
 
     // restart alert
     this.log(`New Webpack entry created, you need to restart the devserver!`.red.bold)
