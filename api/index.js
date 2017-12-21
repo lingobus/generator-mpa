@@ -30,5 +30,10 @@ module.exports = class extends Generator {
         name: this.name
       }
     )
+    this.log(`Why we introduce the api layer(*.api.js):`.bold.red)
+    this.log(`
+      By putting ajax parameters transform and response data transform in your *.api.js,
+      we can make the view layer more thin and more easy to maintain.
+    `.green.bold)
   }
 };
