@@ -45,6 +45,8 @@ module.exports = class extends Generator {
       this.templatePath('login.styl'),
       this.destinationPath(`src/css/login.styl`), locals
     )
+    // install dependencies
+    this.yarnInstall(['lodash','promise.prototype.finally'])
 
     this.log(`add following code to controllers/index.js`.red.bold)
     this.log(`
