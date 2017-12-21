@@ -7,6 +7,10 @@ import App from './App.vue'
 import routes from './_routes.js'
 import modules from './store'
 import 'utils/_interceptors.js'
+
+// uncomment following line if you need it
+// require('promise.prototype.finally').shim()
+
 window.$LB = window.$LB || {}
 
 // sensorsdata
