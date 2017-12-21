@@ -31,10 +31,10 @@ module.exports = class extends Generator {
         name: this.name
       }
     )
-    this.log(`1) import create page in _routes.js:`.red.bold)
+    this.log(`1) import created page in _routes.js:`.red.bold)
     this.log(`import ${capitalizedName} from './pages/${this.name}/${capitalizedName}.vue'`)
     this.log('')
     this.log(`2) point 'path' to created page component:`.red.bold)
-    this.log(`{ path: '/paht/to/page', component: ${capitalizedName}, props: {} }`)
+    this.log(`{ path: '/${this.name}', component: ${capitalizedName}, props: {} }`)
   }
 };

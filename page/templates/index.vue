@@ -1,5 +1,6 @@
 <template lang="jade">
   .<%=name%>
+    h1 <%=name%>
 </template>
 
 <script>

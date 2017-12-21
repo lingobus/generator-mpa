@@ -80,7 +80,7 @@ export default {
       }
       UserAPI.login(this.username, this.password).then(isOK => {
         // TODO: redirect to index page if login successfully
-        location = '/index'
+        location = '/'
       }).catch(e => {
         this.$error(this.$t('loginFailed'))
       })

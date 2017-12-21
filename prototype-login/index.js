@@ -25,6 +25,10 @@ module.exports = class extends Generator {
 
   writing() {
     const locals = {sysname: this.sysname}
+    this.fs.copy(
+      this.templatePath('logo.png'),
+      this.destinationPath(`src/css/logo.png`)
+    )
     this.fs.copyTpl(
       this.templatePath('login.js'),
       this.destinationPath(`src/js/login.js`), locals
