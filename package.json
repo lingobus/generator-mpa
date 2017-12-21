@@ -12,7 +12,10 @@
     "middleware",
     "mock",
     "page",
+    "page-component",
+    "page-data-table",
     "prototype-login",
+    "prototype-dashbaord",
     "spa",
     "store"
   ],
