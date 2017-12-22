@@ -8,6 +8,7 @@
     "api",
     "component",
     "controller",
+    "dialog",
     "download",
     "middleware",
     "mock",
@@ -36,6 +37,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "download-git-repo": "^1.0.1",
+    "glob": "^7.1.2",
     "ora": "^1.3.0",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
