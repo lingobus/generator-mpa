@@ -1,6 +1,6 @@
 <template lang="jade">
   .<%=name%>
-    el-dialog(v-bind="$vnode.data.attrs")
+    el-dialog(:visible="isOpen", v-bind="$vnode.data.attrs")
       .content TODO: Dialog content here
       span.dialog-footer(slot="footer")
         el-button(@click="onButtonClicked('cancel')") Cancel
@@ -30,7 +30,7 @@ export default {
   ],
   data () {
     return {
-
+      isOpen: false
     }
   },
   methods: {
@@ -38,9 +38,15 @@ export default {
     init () {
 
     },
+    open () {
+      this.isOpen = true
+    },
+    close () {
+      this.isOpen = false
+    },
     // event handlers
     onButtonClicked (whichButton) {
-      this.$emit('action', whichButton)
+      this.$emit('action', whichButton, () => this.close())
     }
   },
   watch: {

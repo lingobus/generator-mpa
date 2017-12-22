@@ -85,16 +85,16 @@ module.exports = class extends Generator {
       <template>
         <!-- html -->
         <${this.name}
+          ref="dialog",
           title="Dialog Title",
-          :visible="isOpen${camelizedName}
           size="${this.size}",
           @action="on${camelizedName}Action">
         </${this.name}>
 
         <!-- jade -->
         ${this.name}(
+          ref="dialog",
           title="Dialog Title",
-          :visible="isOpen${camelizedName}",
           size="${this.size}",
           @action="on${camelizedName}Action")
       </template>
@@ -106,17 +106,12 @@ module.exports = class extends Generator {
           Component,
           ${camelizedName}
         },
-        data () {
-          data,
-          isOpen${camelizedName}: true
-        },
         methods: {
           method () {
-
+            this.$refs.dialog.open()
           },
-          on${camelizedName}Action (act) {
-            console.log(act)
-            this.isOpen${camelizedName} = false
+          on${camelizedName}Action (act, close) {
+            close()
           }
         }
       }
