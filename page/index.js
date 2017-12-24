@@ -24,17 +24,23 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    var capitalizedName = this.name[0].toUpperCase() + this.name.slice(1)
+    var camelizedName = camelize(this.name)
     this.fs.copyTpl(
       this.templatePath('index.vue'),
-      this.destinationPath(`src/js/pages/${this.name}/${capitalizedName}.vue`), {
+      this.destinationPath(`src/js/pages/${this.name}/${camelizedName}.vue`), {
         name: this.name
       }
     )
     this.log(`1) import created page in _routes.js:`.red.bold)
-    this.log(`import ${capitalizedName} from './pages/${this.name}/${capitalizedName}.vue'`)
+    this.log(`import ${camelizedName} from './pages/${this.name}/${camelizedName}.vue'`)
     this.log('')
     this.log(`2) point 'path' to created page component:`.red.bold)
-    this.log(`{ path: '/${this.name}', component: ${capitalizedName}, props: {} }`)
+    this.log(`{ path: '/${this.name}', component: ${camelizedName}, props: {} }`)
   }
-};
+}
+
+function camelize(s) {
+  return s.replace(/(^[a-z]|[-_]([a-z]))/g, function(_, a, b) {
+    return (b || a).toUpperCase()
+  })
+}
