@@ -1,6 +1,6 @@
 {
   "name": "generator-mpa",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Yeoman Generators for vue-mpa-template generated projects",
   "main": "index.js",
   "scripts": {},
