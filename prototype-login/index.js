@@ -1,17 +1,7 @@
-const Generator = require('yeoman-generator')
-require('colors')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
-  initializing() {
-    this.pkg = require('../package.json');
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'input',
       name: 'sysname',
@@ -19,40 +9,22 @@ module.exports = class extends Generator {
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.sysname = answers.name;
+      this.answers = answers
     });
   }
 
   writing() {
-    const locals = {sysname: this.sysname}
-    this.fs.copy(
-      this.templatePath('logo.png'),
-      this.destinationPath(`src/css/logo.png`)
-    )
-    this.fs.copyTpl(
-      this.templatePath('login.js'),
-      this.destinationPath(`src/js/login.js`), locals
-    )
-    this.fs.copyTpl(
-      this.templatePath('Login.vue'),
-      this.destinationPath(`src/js/pages/login/Login.vue`), locals
-    )
-    this.fs.copyTpl(
-      this.templatePath('login.jade'),
-      this.destinationPath(`src/html/login.jade`), locals
-    )
-    this.fs.copyTpl(
-      this.templatePath('login.styl'),
-      this.destinationPath(`src/css/login.styl`), locals
-    )
-    // install dependencies
-    this.yarnInstall(['lodash','promise.prototype.finally'])
+    const locals = this.answers
+    this.cp([
+      ['logo.png', 'src/img/logo.png'],
+      ['login.js', 'src/js/login.js', locals],
+      ['Login.vue', 'src/js/pages/login/Login.vue', locals],
+      ['login.jade', 'src/html/login.jade', locals],
+      ['login.styl', 'src/css/login.styl', locals],
+      ['login.controller.js', 'controller/login.controller.js', locals]
+    ])
 
-    this.log(`add following code to controllers/index.js`.red.bold)
-    this.log(`
-      router.get('/login', function (req, res) {
-        res.render('login')
-      })
-    `)
+    // install dependencies
+    this.installPkgs(['lodash', 'promise.prototype.finally'])
   }
 };

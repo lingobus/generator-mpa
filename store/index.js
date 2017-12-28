@@ -1,17 +1,7 @@
-const Generator = require('yeoman-generator')
-require('colors')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
-  initializing() {
-    this.pkg = require('../package.json');
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'input',
       name: 'name',
@@ -19,26 +9,24 @@ module.exports = class extends Generator {
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.name = answers.name;
+      this.answers = answers
     });
   }
 
   writing() {
-    var capitalizedName = this.name[0].toUpperCase() + this.name.slice(1)
-    this.fs.copyTpl(
-      this.templatePath('index.js'),
-      this.destinationPath(`src/js/store/_${this.name}.store.js`), {
-        name: this.name
-      }
-    )
+    var name = this.getName()
+    this.cp([
+      ['index.js', `src/js/store/_${name}.store.js`, this.answers]
+    ])
+
     this.log(`1) import create page in src/js/store/index.js:`.red.bold)
-    this.log(`import ${this.name} from './_${this.name}.store.js'`)
+    this.log(`import ${name} from './_${name}.store.js'`.green.bold)
     this.log('')
     this.log(`2) export:`.red.bold)
     this.log(`
       export default {
-        ${this.name}
+        ${name}
       }
-    `)
+    `.green.bold)
   }
 };

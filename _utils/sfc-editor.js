@@ -94,4 +94,4 @@ SfcEditor.prototype.save = function () {
   return fs.writeFileSync(this.srcPath, newCode)
 }
 
-export default SfcEditor
+module.exports = SfcEditor

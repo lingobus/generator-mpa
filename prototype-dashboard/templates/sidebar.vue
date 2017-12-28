@@ -78,8 +78,8 @@ $expandWidth = 110px
   import Settings from 'api/_settings.api.js'
   import ElTooltip from 'element-ui/lib/tooltip'
   import _throttle from 'lodash/throttle'
-  import sidebarList from './_sidebar-menu.js'
-
+  //see http://fontawesome.io/icons/ for more icons
+  import sidebarList from './sidebar.json'
 
   export default {
     name: 'Sidebar',

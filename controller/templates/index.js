@@ -1,5 +1,5 @@
-var router = require('express').Router()
-
-router.get('/', function (req, res) {
-  res.render('<%=name%>')
-})
+module.exports = function (router) {
+  router.get('<%=url%>', function (req, res) {
+    res.render('<%=tpl%>')
+  })
+}

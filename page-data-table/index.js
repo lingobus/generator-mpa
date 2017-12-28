@@ -1,80 +1,98 @@
-const Generator = require('yeoman-generator')
-require('colors')
+const Generator = require('../_utils/base-generator.js')
+const JsonEditor = require('../_utils/json-editor.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts)
-  }
-
-  initializing() {
-    this.pkg = require('../package.json')
-  }
-
+  // constructor(args, opts) {
+  //   super(args, opts)
+  // }
   prompting() {
-
     const prompts = [{
       type: 'input',
-      name: 'page',
-      message: 'Please input the page name, for example: user',
+      name: 'dir',
+      message: 'Please input the page dir name, for example: user',
     }, {
       type: 'input',
       name: 'name',
-      message: 'Please input table name, for example: users',
+      message: 'Please input page file name, for example: Users',
+    }, {
+      type: 'confirm',
+      name: 'addToSidebar',
+      message: 'Add to sidebar menu?'
     }]
 
     return this.prompt(prompts).then(answers => {
-      this.name = answers.name
-      this.page = answers.page
+      this.answers = answers
     })
   }
 
   writing() {
-    var capitalizedName = this.name[0].toUpperCase() + this.name.slice(1)
-    const locals = {name: this.name, capitalizedName}
+    const locals = this.answers
+    const name = this.answers.name // uppercased
+    const dir = this.answers.dir
+    var camelizedName = locals.camelizedName = this.camelize(name)
 
-    // components
-    this._cpTpl('page.vue', `src/js/pages/${this.page}/${capitalizedName}.vue`, locals)
-    this._cp('query-bar.vue', `src/js/components/query-bar.vue`)
-    this._cp('dynamic-form-item.vue', `src/js/components/dynamic-form-item.vue`)
+    this.cp([
+      // components
+      ['page.vue', `src/js/pages/${dir}/${camelizedName}.vue`, locals],
+      ['query-bar.vue', `src/js/components/query-bar.vue`],
+      ['dynamic-form-item.vue', `src/js/components/dynamic-form-item.vue`],
 
-    // utils
-    this._cp('_search-result-page-utils.js', `src/js/utils/_search-result-page-utils.js`)
+      // utils
+      ['_search-result-page-utils.js', `src/js/utils/_search-result-page-utils.js`],
 
+      // apis
+      ['_mpa-demo.api.js', 'src/js/api/_mpa-demo.api.js'.replace('demo', dir), locals],
 
-    // apis
-    this._cpTpl('_mpa-demo.api.js', 'src/js/api/_mpa-demo.api.js', locals)
-
-    // mock
-    this._cpTpl('mock.js', `mock/${this.name}.js`, locals)
+      // mock
+      ['mock.js', `mock/${dir}.js`, locals],
+    ])
 
     // install dependencies
-    this.yarnInstall([
+    this.installPkgs([
       "babel-plugin-syntax-jsx",
       "babel-plugin-transform-vue-jsx"
     ])
 
-    this.log(`add following plugins into .bablerc:`.red.bold)
+    this.log(`Adding transform-vue-js plugin to .babelrc:`.red.bold)
+    this.babelrc.push('plugins', 'transform-vue-jsx')
+    this.babelrc.save()
+
+
+    this.log(`Add following plugins into mock/index.js:`.red.bold)
     this.log(`
-    "plugins": ["transform-vue-jsx"]
+      router.use(apiurl('/${dir}'), require('./${dir}'))
     `.green.bold)
 
-    this.log(`add following plugins into mock/index.js and restart dev server:`.red.bold)
+    this.log(`Add following code to _routes.js`.red.bold)
     this.log(`
-      router.use(apiurl('/${this.name}'), require('./${this.name}'))
+      import ${camelizedName} from './pages/${dir}/${camelizedName}.vue'
+      ...
+      export default [
+        { path: '/${dir}', component: ${camelizedName}, props: {} }
+      ]
     `.green.bold)
-  }
 
-  _cp (from, to) {
-    this.fs.copy(
-      this.templatePath(from),
-      this.destinationPath(to)
-    )
-  }
-  _cpTpl (from, to, locals) {
-    this.fs.copyTpl(
-      this.templatePath(from),
-      this.destinationPath(to),
-      locals
-    )
+    this.log(`You may want to edit menu item icon in src/js/components/sidebar.json`.red.bold)
+    this.log(`see http://fontawesome.io/icons/ for more icons`.red.bold)
+    if (this.answers.addToSidebar) {
+      const editor = new JsonEditor(this.destinationPath('src/js/components/sidebar.json'), true, [])
+      if (!editor.json.some(it => it.to == `/${dir}`)) {
+        editor.push({
+          "to": `/${dir}`,
+          "content": camelizedName,
+          "icon": "question",
+          "classList": [dir]
+        }).save()
+      } else {
+        this.log(`There already have a menu item point to /${dir}!`.red)
+      }
+    }
+
+    this.log(`Following url should be "/${dir}"!`.red)
+    this.composeWith(require.resolve('generator-mpa/controller', {
+      url: `/${dir}`,
+      tpl: 'index',
+      name: dir
+    }))
   }
 }

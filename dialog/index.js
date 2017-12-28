@@ -1,21 +1,9 @@
-const Generator = require('yeoman-generator')
+const Generator = require('../_utils/base-generator.js')
 const glob = require('glob')
 const path = require('path')
-require('colors')
-
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
-  initializing() {
-    this.pkg = require('../package.json')
-    this._readPageDirs()
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'list',
       name: 'type',
@@ -25,7 +13,7 @@ module.exports = class extends Generator {
         value: 'common',
         short: 'common'
       }, {
-        name: 'A dialog for page (src/pages/???/):',
+        name: 'A dialog for page (src/pages/<page-name>/):',
         value: 'page',
         short: 'page'
       }]
@@ -34,10 +22,11 @@ module.exports = class extends Generator {
       name: 'pageName',
       message: 'which page?',
       when: answers => answers.type === 'page',
-      choices : this.pages
+      choices : this.getPages()
     }, {
       type: 'input',
       name: 'dialogName',
+      default: 'dialog',
       message: 'dialog name, dash-separated, not "-dialog" suffix:'
     }, {
       type: 'list',
@@ -60,27 +49,30 @@ module.exports = class extends Generator {
     }]
 
     return this.prompt(prompts).then(answers => {
+      this.answers = answers
       this.type = answers.type
       this.page = answers.pageName
       this.name = answers.dialogName + '-dialog'
       this.size = answers.dialogSize
+
+      answers.name = this.name
     })
   }
 
   writing() {
-    const locals = {name: this.name, size: this.size}
-    const camelizedName = camelize(this.name)
-    var dest = `src/components/${this.name}.vue`
+    const camelizedName = this.camelize(this.name)
+
+    var dest
     if (this.type === 'page') {
       dest = `src/js/pages/${this.page}/${this.name}.vue`
+    } else {
+      dest = `src/components/${this.name}.vue`
     }
-    this.fs.copyTpl(
-      this.templatePath('dialog.vue'),
-      this.destinationPath(dest),
-      locals
-    )
+    this.cp([
+      ['dialog.vue', dest, this.answers]
+    ])
 
-    this.log(`select part of the following code and insert it to where needed`.red.bold)
+    this.log(`select part of the following code and paste it to where needed`.red.bold)
     this.log(`
       <template>
         <!-- html -->
@@ -118,22 +110,4 @@ module.exports = class extends Generator {
       </script>
     `.green.bold)
   }
-  _readPageDirs () {
-    const root = this.destinationRoot()
-    this.pages = glob.sync(`${root}/src/js/pages/*/`).reduce(function (all, page) {
-      const name = path.basename(page)
-      all.push({
-        name: name,
-        value: name,
-        short: name
-      })
-      return all
-    }, [])
-  }
-}
-
-function camelize(s) {
-  return s.replace(/(^[a-z]|[-_]([a-z]))/g, function(_, a, b) {
-    return (b || a).toUpperCase()
-  })
 }

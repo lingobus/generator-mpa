@@ -1,16 +1,7 @@
-const Generator = require('yeoman-generator')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
-  initializing() {
-    this.pkg = require('../package.json');
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'input',
       name: 'name',
@@ -18,16 +9,19 @@ module.exports = class extends Generator {
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.name = answers.name;
+      this.answers = answers;
     });
   }
 
   writing() {
-    this.fs.copyTpl(
-      this.templatePath('index.vue'),
-      this.destinationPath('src/js/components/' + this.name + '.vue'), {
-        name: this.name
-      }
-    )
+    const name = this.answers.name
+    const compName = this.camelize(name)
+    this.log('Import this component where needed:'.red.bold)
+    this.log(`
+    import ${compName} from '@components/${name}.vue'
+    `.green.bold)
+    this.cp([
+      ['index.vue', this.getName('.vue', 'src/js/components/'), this.answers]
+    ])
   }
 };

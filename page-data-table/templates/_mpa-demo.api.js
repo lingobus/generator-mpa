@@ -32,7 +32,7 @@ function normalizeUserInfo (usr) {
 api.SearchResultPage = {
   queryParamsConfig: [{
     name: 'id',
-    caption: '<%=capitalizedName%> Id',
+    caption: '<%=camelizedName%> Id',
     inputType: 'text'
   }, {
     name: 'name',

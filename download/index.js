@@ -1,16 +1,11 @@
 const path = require('path')
-const Generator = require('yeoman-generator')
-const download = require('download-git-repo')
 const ora = require('ora')
-require('colors')
+const download = require('download-git-repo')
+
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'input',
       name: 'url',
@@ -39,6 +34,7 @@ module.exports = class extends Generator {
   _downloadAndGenerate(template) {
     const dir = this.repo.replace('generator-', '')
     const tmp = path.resolve(__dirname, `../${dir}`)
+    const that = this
 
     const spinner = ora(`Downloading template ${this.url} into ${tmp}`)
     spinner.start()
@@ -46,7 +42,11 @@ module.exports = class extends Generator {
       clone: false
     }, function(err) {
       spinner.stop()
-      if (err) console.log('Failed to download repo ' + template + ': ' + err.message.trim())
+      if (err) {
+        console.log('Failed to download repo ' + template + ': ' + err.message.trim())
+      } else {
+        that.log('Run yo --generators to see downloaded mpa generator'.red.bold)
+      }
     })
   }
 }

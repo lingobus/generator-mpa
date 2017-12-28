@@ -1,47 +1,30 @@
-const Generator = require('yeoman-generator')
-require('colors')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
   constructor(args, opts) {
-    super(args, opts);
+    super(args, opts)
   }
-
-  initializing() {
-    this.pkg = require('../package.json');
-  }
-
-  prompting() {
-
-    const prompts = [{
-      type: 'input',
-      name: 'sysname',
-      message: 'Please input system name, for example: CRM System',
-    }];
-
-    return this.prompt(prompts).then(answers => {
-      this.sysname = answers.name;
-    });
-  }
-
   writing() {
-    const locals = {}
-    // main files
-    this._cp('App.vue', 'src/js/App.vue')
-    this._cp('index.jade', 'src/html/index.jade')
-    this._cp('index.js', 'src/js/index.js')
-    this._cp('index.styl', 'src/css/index.styl')
-    this._cp('logo.png', 'src/img/logo.png')
+    // const locals = {}
+    this.cp([
+      // main files
+      ['App.vue', 'src/js/App.vue'],
+      ['index.jade', 'src/html/index.jade'],
+      ['index.js', 'src/js/index.js'],
+      ['index.styl', 'src/css/index.styl'],
+      ['logo.png', 'src/img/logo.png'],
 
-    // components
-    this._cp('sidebar.vue', `src/js/components/sidebar.vue`)
-    this._cp('_sidebar-menu.js', `src/js/components/_sidebar-menu.js`)
-    this._cp('navbar.vue', `src/js/components/navbar.vue`)
+      // components
+      ['sidebar.vue', `src/js/components/sidebar.vue`],
+      ['_sidebar-menu.js', `src/js/components/_sidebar-menu.js`],
+      ['navbar.vue', `src/js/components/navbar.vue`],
 
-    // apis
-    this._cp('_settings.api.js', `src/js/api/_settings.api.js`)
+      // apis
+      ['_settings.api.js', `src/js/api/_settings.api.js`]
+    ])
 
     // extra code
-    this.log(`add following code to controllers/index.js:`.red.bold)
+    this.log(`You may need to add following code to controllers/index.js:`.red.bold)
     this.log(`
     router.get('/', function (req, res) {
       res.render('index')
@@ -49,25 +32,15 @@ module.exports = class extends Generator {
     `)
 
     // install dependencies
-    this.yarnInstall([
+    this.installPkgs([
       "vue-awesome",
       "babel-plugin-syntax-jsx",
       "babel-plugin-transform-vue-jsx"
     ])
 
-    this.log(`add following plugins into .bablerc and restart dev server:`.red.bold)
-    this.log(`
-    "plugins": [transform-vue-jsx"]
-    `)
-
-    // restart alert
-    this.log(`New Webpack entry created, you need to restart the devserver!`.red.bold)
-  }
-
-  _cp (from, to) {
-    this.fs.copy(
-      this.templatePath(from),
-      this.destinationPath(to)
-    )
+    this.log(`adding transform-vue-js plugin to .babelrc:`.red.bold)
+    this.babelrc.push('plugins', 'transform-vue-jsx')
+    this.babelrc.save()
+    this.restart()
   }
 };

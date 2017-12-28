@@ -13,11 +13,11 @@
         :total="totalItem",
         @current-change="onPageChanged")
 
-  .<%=name%>-page
+  .<%=dir%>-page
     //- breadcrumb
     el-breadcrumb(separator='/')
       el-breadcrumb-item Location:
-      el-breadcrumb-item(:to="{ path: '/<%=name%>' }") <%=capitalizedName%>
+      el-breadcrumb-item(:to="{ path: '/<%=dir%>' }") <%=camelizedName%>
 
     //- query bar
     query-bar(id="field-query-bar",
@@ -36,12 +36,12 @@
     el-table(:data="tableData", style="width:100%", stripe="stripe", v-loading="loading")
 
       //- simple row
-      el-table-column(label="<%=name%> Id", prop="<%=name%>Id", width="80")
+      el-table-column(label="<%=dir%> Id", prop="<%=dir%>Id", width="80")
 
       //- row with template
       el-table-column(label="Name")
         template(scope)
-          a.link(:href="`/<%=name%>/${scope.row.<%=name%>Id}`", :label="scope.row.name", v-text="scope.row.name")
+          a.link(:href="`/<%=dir%>/${scope.row.<%=dir%>Id}`", :label="scope.row.name", v-text="scope.row.name")
 
       //- row with for-loop inside
       el-table-column(label="Items")
@@ -73,7 +73,7 @@ import MessageMixin from 'utils/_elementui-mixin.js'
 
 // TODO: this is a demo api
 // change to your *.api.js files
-import API from 'api/_mpa-demo.api.js'
+import API from 'api/_mpa-<%=dir%>.api.js'
 
 const Page = API.SearchResultPage
 
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     search (page) {
-      this.doSearch(page, 'Loading <%=name%> list failed!', true)
+      this.doSearch(page, 'Loading <%=dir%> list failed!', true)
     }
   }
 }
@@ -126,7 +126,7 @@ export default {
 </style>
 
 <style lang="stylus">
-.<%=name%>-page
+.<%=dir%>-page
   .el-table th > .cell
       white-space nowrap
 </style>

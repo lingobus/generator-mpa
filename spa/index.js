@@ -1,17 +1,7 @@
-const Generator = require('yeoman-generator')
-require('colors')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
-  initializing() {
-    this.pkg = require('../package.json');
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'input',
       name: 'name',
@@ -31,32 +21,18 @@ module.exports = class extends Generator {
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.name = answers.name;
-      this.useStore = answers.useStore
-      this.hasJade = answers.hasJade
-      this.hasStylus = answers.hasStylus
+      this.answers = answers
     });
   }
 
   writing() {
-    const name = this.name
-    const locals = {name: this.name, useStore: this.useStore}
-    this.fs.copyTpl(
-      this.templatePath('spa.js'),
-      this.destinationPath(`src/js/${name}.js`), locals
-    )
-    if (this.hasJade) {
-      this.fs.copyTpl(
-        this.templatePath('spa.jade'),
-        this.destinationPath(`src/html/${name}.js`), locals
-      )
-    }
-    if (this.hasStylus) {
-      this.fs.copyTpl(
-        this.templatePath('spa.styl'),
-        this.destinationPath(`src/css/${name}.js`), locals
-      )
-    }
+    const name = this.answersname
+    const locals = this.answers
+    this.cp([
+      ['spa.js',`src/js/${name}.js`, locals],
+      [this.hasJade, 'spa.jade', `src/html/${name}.js`, locals],
+      [this.hasStylus, 'spa.styl', `src/css/${name}.js`, locals]
+    ])
 
     if (this.hasJade) {
       this.log(`add following code to controllers/index.js:`.red.bold)

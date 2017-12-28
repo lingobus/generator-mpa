@@ -1,17 +1,7 @@
-const Generator = require('yeoman-generator')
-require('colors')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-  }
-
-  initializing() {
-    this.pkg = require('../package.json');
-  }
-
   prompting() {
-
     const prompts = [{
       type: 'input',
       name: 'name',
@@ -19,18 +9,14 @@ module.exports = class extends Generator {
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.name = answers.name;
+      this.answers = answers
     });
   }
 
   writing() {
-    var name = this.name + '.js'
-    this.fs.copyTpl(
-      this.templatePath('index.js'),
-      this.destinationPath('mock/' + name), {
-        name: name
-      }
-    )
-    this.log(`You need to restart dev server to activate mock code!`.red.bold)
+    this.cp([
+      ['index.js', this.getName('.js', 'mock/'), this.answers]
+    ])
+    this.restart()
   }
 };
