@@ -17,7 +17,7 @@ module.exports = class extends Generator {
     const name = this.answers.name
     const camelizedName = this.camelize(name)
     this.cp([
-      ['index.vue', `src/js/pages/${name}/${camelizedName}.vue`]
+      ['index.vue', `src/js/pages/${name}/${camelizedName}.vue`, this.answers]
     ])
 
     this.log(`1) import created page in _routes.js:`.red.bold)
