@@ -1,4 +1,4 @@
-const Generator = require('yeoman-generator')
+const Generator = require('../_utils/base-generator.js')
 
 module.exports = class extends Generator {
   prompting() {
