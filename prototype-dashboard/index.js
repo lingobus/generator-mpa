@@ -16,7 +16,7 @@ module.exports = class extends Generator {
 
       // components
       ['sidebar.vue', `src/js/components/sidebar.vue`],
-      ['_sidebar-menu.js', `src/js/components/_sidebar-menu.js`],
+      ['sidebar.json', `src/js/components/sidebar.json`],
       ['navbar.vue', `src/js/components/navbar.vue`],
 
       // apis
