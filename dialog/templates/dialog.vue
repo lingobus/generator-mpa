@@ -33,6 +33,9 @@ export default {
       isOpen: false
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
     // initializer
     init () {

@@ -18,6 +18,9 @@ export default {
 
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
     // initializer
     init () {}
