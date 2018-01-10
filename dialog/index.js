@@ -92,7 +92,7 @@ module.exports = class extends Generator {
       </template>
 
       <script>
-      import ${camelizedName} from '${this.type === 'page' ? "." : "@components"}/${this.name}.vue'
+      import ${camelizedName} from '${this.type === 'page' ? "." : "components"}/${this.name}.vue'
       export default {
         components: {
           Component,
