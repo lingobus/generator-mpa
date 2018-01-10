@@ -9,7 +9,7 @@ module.exports = class extends Generator {
       name: 'type',
       message: 'Please select',
       choices: [{
-        name: 'A common dialog component (src/components):',
+        name: 'A common dialog component (src/js/components):',
         value: 'common',
         short: 'common'
       }, {
@@ -66,7 +66,7 @@ module.exports = class extends Generator {
     if (this.type === 'page') {
       dest = `src/js/pages/${this.page}/${this.name}.vue`
     } else {
-      dest = `src/components/${this.name}.vue`
+      dest = `src/js/components/${this.name}.vue`
     }
     this.cp([
       ['dialog.vue', dest, this.answers]
@@ -92,7 +92,7 @@ module.exports = class extends Generator {
       </template>
 
       <script>
-      import ${camelizedName} from './${this.name}.vue'
+      import ${camelizedName} from '${this.type === 'page' ? "." : "@components"}/${this.name}.vue'
       export default {
         components: {
           Component,
