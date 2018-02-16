@@ -52,22 +52,24 @@ SfcEditor.prototype.appendImport = function (importCode) {
  */
 SfcEditor.prototype.appendMethod = function (name, args) {
   const js = this.parts.script.content
-  babel.transform(js, {
+  this.parts.script.content = babel.transform(js, {
     plugins: [{
       visitor: {
         ExportDefaultDeclaration(path, state) {
           if(t.isObjectExpression(path.node.declaration)) {
             const props = path.node.declaration.properties
-            const methodsPath = props.filter(p => t.isObjectProperty(p) && p.key.name === 'methods').shift()
-            if (methodsPath) {
-              const m = t.objectMethod('method', t.Identifier(name), [], t.BlockStatement([]))
-              methodsPath.value.properties.push(m)
+            const methodsNode = props.filter(p => t.isObjectProperty(p) && p.key.name === 'methods').shift()
+            const m = t.objectMethod('method', t.Identifier(name), [], t.BlockStatement([]))
+            if (methodsNode) {
+              methodsNode.value.properties.push(m)
+            } else {
+              props.push(t.objectProperty(t.Identifier('methods'), t.objectExpression([m])))
             }
           }
         }
       }
     }]
-  })
+  }).code
   this._update('script')
   return this
 }
