@@ -20,8 +20,9 @@ module.exports = class extends Generator {
     this.log(`
     import ${compName} from '@components/${name}.vue'
     `.green.bold)
+    const dir = this.getComponentsDir(false)
     this.cp([
-      ['index.vue', this.getName('.vue', 'src/js/components/'), this.answers]
+      ['index.vue', this.getName('.vue', `${dir}/`), this.answers]
     ])
   }
 };

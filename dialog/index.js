@@ -4,16 +4,18 @@ const path = require('path')
 
 module.exports = class extends Generator {
   prompting() {
+    const compDir = this.getComponentsDir(false)
+    const pagesDir = this.getPagesDir(false)
     const prompts = [{
       type: 'list',
       name: 'type',
       message: 'Please select',
       choices: [{
-        name: 'A common dialog component (src/js/components):',
+        name: `A common dialog component (${compDir}):`,
         value: 'common',
         short: 'common'
       }, {
-        name: 'A dialog for page (src/pages/<page-name>/):',
+        name: `A dialog for page (${pagesDir}/<page-name>/):`,
         value: 'page',
         short: 'page'
       }]
@@ -62,11 +64,13 @@ module.exports = class extends Generator {
   writing() {
     const camelizedName = this.camelize(this.name)
 
-    var dest
+    var dest, dir
     if (this.type === 'page') {
-      dest = `src/js/pages/${this.page}/${this.name}.vue`
+      dir = this.getPagesDir(false)
+      dest = `${dir}/${this.page}/${this.name}.vue`
     } else {
-      dest = `src/js/components/${this.name}.vue`
+      dir = this.getComponentsDir(false)
+      dest = `${dir}/${this.name}.vue`
     }
     this.cp([
       ['dialog.vue', dest, this.answers]
