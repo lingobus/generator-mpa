@@ -23,7 +23,12 @@ module.exports = class extends Generator {
       }
       console.log('found mpa.config.js', this._conf)
     } else {
-      this._conf = {}
+      this._conf = {
+        dirs: {
+          pages: 'src/js/pages',
+          components: 'src/js/components'
+        }
+      }
     }
   }
 
@@ -80,7 +85,7 @@ module.exports = class extends Generator {
   getPages (reload) {
     if (this.pages && !reload) return this.pages
     const root = this.destinationRoot()
-    const pagesDir = this._conf.pages || 'src/js/pages'
+    const pagesDir = this._conf.dirs.pages || 'src/js/pages'
     this.pages = glob.sync(`${root}/${pagesDir}/*/`).reduce(function (all, page) {
       const name = $path.basename(page)
       all.push({
