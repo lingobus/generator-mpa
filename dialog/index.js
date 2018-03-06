@@ -48,6 +48,11 @@ module.exports = class extends Generator {
         name: 'full',
         value: 'full'
       }]
+    }, {
+      type: 'list',
+      name: 'isInDir',
+      message: 'create single file or in directory?',
+      choices: ['single file', 'dir']
     }]
 
     return this.prompt(prompts).then(answers => {
@@ -64,13 +69,22 @@ module.exports = class extends Generator {
   writing() {
     const camelizedName = this.camelize(this.name)
 
-    var dest, dir
+    var dest, dir, isInDir = this.answers.isInDir === 'dir'
+    this.isInDir = isInDir
     if (this.type === 'page') {
       dir = this.getPagesDir(false)
-      dest = `${dir}/${this.page}/${this.name}.vue`
+      if (isInDir) {
+        dest = `${dir}/${this.page}/${this.name}/index.vue`
+      } else {
+        dest = `${dir}/${this.page}/${this.name}.vue`
+      }
     } else {
       dir = this.getComponentsDir(false)
-      dest = `${dir}/${this.name}.vue`
+      if (isInDir) {
+        dest = `${dir}/${this.name}/index.vue`
+      } else {
+        dest = `${dir}/${this.name}.vue`
+      }
     }
     this.cp([
       ['dialog.vue', dest, this.answers]
@@ -96,7 +110,7 @@ module.exports = class extends Generator {
       </template>
 
       <script>
-      import ${camelizedName} from '${this.type === 'page' ? "." : "components"}/${this.name}.vue'
+      import ${camelizedName} from '${this.type === 'page' ? "." : "components"}/${isInDir ? (this.name + '/index') : this.name}.vue'
       export default {
         components: {
           Component,
