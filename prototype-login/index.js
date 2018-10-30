@@ -21,7 +21,7 @@ module.exports = class extends Generator {
       ['Login.vue', 'src/js/pages/login/Login.vue', locals],
       ['login.jade', 'src/html/login.jade', locals],
       ['login.styl', 'src/css/login.styl', locals],
-      ['login.controller.js', 'controller/login.controller.js', locals]
+      ['login.controller.js', 'controllers/login.controller.js', locals]
     ])
 
     // install dependencies
